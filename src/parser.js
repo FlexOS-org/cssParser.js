@@ -11,7 +11,7 @@ exports.parse = function(code) {
             tree[blockName] = {
                 start: "",
                 end: "",
-                strings: "",
+                string: "",
                 type: "Code block"
             };
             
@@ -19,7 +19,7 @@ exports.parse = function(code) {
             increment++;
         } else if(code.charAt(i) == "}") {
             tree[blockName].end = i + 1;
-            tree[blockName].strings = code.slice(tree[blockName].start, tree[blockName].end);
+            tree[blockName].string = code.slice(tree[blockName].start, tree[blockName].end);
             level--;
         }
     }
@@ -37,16 +37,12 @@ exports.parse = function(code) {
             let prop = 'property';
             tree[blockNumber][tokenID][prop] = new Object();
             tree[blockNumber][tokenID][prop].string = tree[blockNumber][tokenID].string.substring(0, tree[blockNumber][tokenID].string.indexOf(":")).replace(/^\s*/g, "");
-            //tree[blockNumber][tokenID][prop].start = 
             let val = 'value';
             tree[blockNumber][tokenID][val] = new Object();
             tree[blockNumber][tokenID][val].string = tree[blockNumber][tokenID].string.slice(tree[blockNumber][tokenID].string.indexOf(":") + 2, tree[blockNumber][tokenID].string.length).replace(/^\s*/g, "");
             slicedString = slicedString.replace(/.*:\s*.*;/, "");
-            
-            //console.log(tree[blockNumber][tokenID][prop]);
-            //console.log(tree[blockNumber][tokenID][val]);
         }
     }
     
-    console.log(tree);
+    return tree;
 };
