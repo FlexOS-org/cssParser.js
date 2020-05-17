@@ -25,22 +25,50 @@ exports.parse = function(code) {
     }
     
     for(i = 0; i < increment; i++) {
+        let array = [];
+        let arrayCount = 0;
         let blockNumber = `${i}`;
         let blockValue = code.slice(tree[blockNumber].start + 1, tree[blockNumber].end - 1);
-        blockValue = blockValue.split(";").join(";\n");
-        blockValue = blockValue.replace(/\n\s*\n/g, "\n");
         let slicedString = blockValue;
-        for(j = 0; j < blockValue.match(/.*:\s*.*;/g).length; j++) {
+        array = tree[blockNumber].string.split(";");
+        for(i = 0; i < array.length; i++) {
+            if(i != array.length - 1) {
+                array[i] = array[i] + ";";
+            }
+        } for(i = 0; i < array.length; i++) {
+            let size = 0;
+            let arraY = array.slice(i - 1, i);
+            let string = "";
+            for(j = 0; j < arraY.length; j++) {
+                string = string + arraY[j];
+            }
+            array[i] = string + array[i];
+        }
+        
+        for(j = 0; j < blockValue.match(/(.*?):(\s*?)(.*?);/g).length; j++) {
             let tokenID = "Declaration " + `${j}`;
             tree[blockNumber][tokenID] = new Object();
-            tree[blockNumber][tokenID].string = slicedString.match(/.*:\s*.*;/g)[0];
+            tree[blockNumber][tokenID].string = slicedString.match(/(.*?):(\s*?)(.*?);/g)[0];
             let prop = 'property';
             tree[blockNumber][tokenID][prop] = new Object();
             tree[blockNumber][tokenID][prop].string = tree[blockNumber][tokenID].string.substring(0, tree[blockNumber][tokenID].string.indexOf(":")).replace(/^\s*/g, "");
+            if(j != 0) {
+                tree[blockNumber][tokenID].start = tree[blockNumber].start + array[j - 1].length;
+                tree[blockNumber][tokenID].end   = array[j].length + tree[blockNumber].start;
+            } else {
+                tree[blockNumber][tokenID].start = tree[blockNumber].start + tree[blockNumber].string.search(/(.*?):(\s*?)(.*?);/g);
+                tree[blockNumber][tokenID].end   = array[j].length + tree[blockNumber].start;
+            }
+            
+            tree[blockNumber][tokenID][prop].start = tree[blockNumber][tokenID].start + tree[blockNumber][tokenID].string.substring(0, tree[blockNumber][tokenID].string.indexOf(":")).search(/[^\s]/);
+            tree[blockNumber][tokenID][prop].end = tree[blockNumber][tokenID].start + tree[blockNumber][tokenID].string.search(":");
+            
             let val = 'value';
             tree[blockNumber][tokenID][val] = new Object();
             tree[blockNumber][tokenID][val].string = tree[blockNumber][tokenID].string.slice(tree[blockNumber][tokenID].string.indexOf(":") + 2, tree[blockNumber][tokenID].string.length).replace(/^\s*/g, "");
-            slicedString = slicedString.replace(/.*:\s*.*;/, "");
+            tree[blockNumber][tokenID][val].start = tree[blockNumber][tokenID].start + tree[blockNumber][tokenID].string.search(":") + 1;
+            tree[blockNumber][tokenID][val].end = tree[blockNumber][tokenID][val].start + tree[blockNumber][tokenID][val].string.length;
+            slicedString = slicedString.replace(/(.*?):(\s*?)(.*?);/, "");
         }
     }
     
