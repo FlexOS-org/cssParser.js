@@ -1,4 +1,12 @@
 exports.parse = function(code) {
+    code = code.replace(/(@import\s*((".*")|('.*'));)|(@import\s*url\(\s*((".*")|('.*'))\s*\);)/g, function(x) {
+        return "0".repeat(x.length);
+    }); code = code.replace(/(^(@charset\s*((".*")|('.*'))))/g, function(x) {
+        return "0".repeat(x.length);
+    }); code = code.replace(/(^(@charset\s*((".*")|('.*'))))/g, function(x) {
+        return "0".repeat(x.length);
+    });
+    
     tree = new Object();
     increment = new Number();
     valueIncrement = new Number(0);
@@ -12,7 +20,8 @@ exports.parse = function(code) {
                 start: "",
                 end: "",
                 string: "",
-                type: "Code block"
+                type: "Code block",
+                selector: ""
             };
             
             tree[blockName].start = i;
@@ -28,21 +37,28 @@ exports.parse = function(code) {
         let array = [];
         let arrayCount = 0;
         let blockNumber = `${i}`;
+        let selector = "";
+        if(i > 0) {
+            selector = code.slice(tree[`${i - 1}`].end, tree[blockNumber].start - 1).split("\n").join("").split("\r").join("").replace(/0+/g, "");
+        } else {
+            selector = code.substring(0, tree[blockNumber].start - 1).split("\n").join("").split("\r").join("").replace(/0+/g, "");
+        }
+        tree[blockNumber].selector = selector;
         let blockValue = code.slice(tree[blockNumber].start + 1, tree[blockNumber].end - 1);
         let slicedString = blockValue;
         array = tree[blockNumber].string.split(";");
-        for(i = 0; i < array.length; i++) {
-            if(i != array.length - 1) {
-                array[i] = array[i] + ";";
+        for(j = 0; j < array.length; j++) {
+            if(j != array.length - 1) {
+                array[j] = array[j] + ";";
             }
-        } for(i = 0; i < array.length; i++) {
+        } for(j = 0; j < array.length; j++) {
             let size = 0;
-            let arraY = array.slice(i - 1, i);
+            let arraY = array.slice(j - 1, j);
             let string = "";
-            for(j = 0; j < arraY.length; j++) {
-                string = string + arraY[j];
+            for(k = 0; k < arraY.length; k++) {
+                string = string + arraY[k];
             }
-            array[i] = string + array[i];
+            array[j] = string + array[j];
         }
         
         for(j = 0; j < blockValue.match(/(.*?):(\s*?)(.*?);/g).length; j++) {
