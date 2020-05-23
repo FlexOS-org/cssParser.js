@@ -1,4 +1,3 @@
 const cssParser = require('./cssParser.js');
-const FileSystem= require('fs');
 
-cssParser.parse(FileSystem.readFileSync("./example.css").toString());
+cssParser.parse(".example { background-color: grey; position: absolute; } @import (myfile.css);");
