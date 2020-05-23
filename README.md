@@ -21,29 +21,21 @@ Finally, run `node index.js` and the output will be an object describing each co
 
 Example:
 
-    {
-       '0': {
-         start: 8,
-         end: 57,
-         strings: '{\n    background-color: blue;\n    color: white;\n}',
-         type: 'Code block',
-         'Declaration 0': 
-          { string: '    background-color: blue;',
-            property: {
-               string: 'background-color'
-            },
-            value: {
-               string: 'blue;'
-            }
-          },
-         'Declaration 1': 
-          { string: '    color: white;',
-            property: {
-               string: 'color'
-            },
-            value: {
-               string: 'white;'
-            }
-          }
-       }
-    }
+<pre>{ &apos;0&apos;: 
+   { start: 9,
+     end: 56,
+     string: &apos;{ background-color: grey; position: absolute; }&apos;,
+     type: &apos;Code block&apos;,
+     selector: &apos;.example&apos;,
+     &apos;Declaration 0&apos;: 
+      { string: &apos; background-color: grey;&apos;,
+        property: [Object],
+        start: 9,
+        end: 34,
+        value: [Object] },
+     &apos;Declaration 1&apos;: 
+      { string: &apos; position: absolute;&apos;,
+        property: [Object],
+        start: 34,
+        end: 54,
+        value: [Object] } } }</pre>
