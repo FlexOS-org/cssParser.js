@@ -16,28 +16,3 @@ exports.getAllDeclarationsAtBlock = function(handle, blockNumber) {
         return returnedObject;
     }
 };
-
-exports.preprocess = function(input) {
-    let matched     = [];
-    let matchedPos  = [];
-    if(input.search(/(@import\s*((".*")|('.*'));)|(@import\s*url\(\s*((".*")|('.*'))\s*\);)|(@import\s*url\(\s*.*\s*\);)/g) != -1) {
-        for(i = 0; i < input.match(/(@import\s*((".*")|('.*'));)|(@import\s*url\(\s*((".*")|('.*'))\s*\);)|(@import\s*url\(\s*.*\s*\);)/g).length; i++) {
-            matched.push(input.match(/(@import\s*((".*")|('.*'));)|(@import\s*url\(\s*((".*")|('.*'))\s*\);)|(@import\s*url\(\s*.*\s*\);)/g)[i]);
-            matchedPos.push()
-        }
-    }
-    
-    for(i = 0; i < matched.length; i++) {
-        matched[i] = matched[i].replace(/^@import\s*/g, "");
-        matched[i] = matched[i].replace(/(\s*;)$/gm, "");
-        if(matched[i].search(/(^(url\())/g) != -1) {
-            matched[i] = matched[i].replace(/(^(url\())/g, "");
-        }
-        
-        matched[i] = matched[i].replace(/(^")|(^')/g, "").replace(/("$)|('$)|('\s*\)\s*$)|("\s*\)\s*$)|(\)\s*$)/g, "");
-        
-        if(matched[i].search(/(^((https|https):\/\/www\..*\.[A-z]*))|(^((https|https):\/\/.*\.[A-z]*))|(^(www\..*\.[A-z]*))/g) != -1) {
-            return scrape.scrape(matched[i]);
-        }
-    }
-}
