@@ -1,6 +1,5 @@
 # cssParser.js
-A simple, tiny, light and powerful CSS parser written completely in JavaScript and Node.js.
-##### WARNING: THIS PROJECT IS UNDER DEVELOPMENT, AND IT'S NOT RECOMMENDED TO USE IT.
+A simple, tiny, light and powerful CSS parser written completely in JavaScript and Node.js developed originally for ThetaIDE.
 
 ### How to run it:<br>
 NOTE: This library requires Node.js. If you didn't install it, download it from the original site https://nodejs.org/en/ or run `sudo apt-get install nodejs` command if you're on Ubuntu or Debian.
